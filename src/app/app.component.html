@@ -60,6 +60,14 @@
       >Azure</mat-slide-toggle>
   </div>
     <div class="menu filter">
+      <div class="title">Simulate using unit skills</div>
+      <mat-slide-toggle
+        [id]="'Simulation.skills'"
+        [checked]="true"
+        (change)="changeFilterSetting($event)"
+      >use skills</mat-slide-toggle>
+    </div>
+    <div class="menu filter">
       <div class="title">Simulation iterations per match (lower is faster, higher is more precise)</div>
       <mat-slider discrete min="100" max="1000" step="100">
         <input matSliderThumb value="{{itterations}}" (valueChange)="setIterations($event)">

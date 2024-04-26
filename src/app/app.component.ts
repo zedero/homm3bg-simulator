@@ -60,6 +60,9 @@ export class AppComponent implements AfterViewInit {
       Silver: true,
       Gold: true,
       Azure: true,
+    },
+    Simulation: {
+      skills: true
     }
   }
 
@@ -73,17 +76,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   private filterMatchesArr(matches: any[]) {
-    // const filterCheck = function (attacker: Unit, defender: Unit, isNeutral: string, tier: string) {
-    //   if (
-    //     attacker.tier === tier && attacker.faction !== 'Neutral' && !this.filterSettings.Faction.Bronze
-    //     || defender.tier === tier && defender.faction !== 'Neutral' && !this.filterSettings.Faction.Bronze
-    //   ) {
-    //     return false;
-    //   }
-    //   return true;
-    // }
-
-
     return matches.filter((match) => {
       if (
            match[0].tier === 'Bronze' && match[0].faction !== 'Neutral' && !this.filterSettings.Faction.Bronze
@@ -150,7 +142,13 @@ export class AppComponent implements AfterViewInit {
     let matches: any;
     this.isOneSided = false;
 
-    const units = this.units;
+    this.units = JSON.parse(JSON.stringify(UNITS));
+    const units = this.units.map((unit: any) => {
+      if (!this.filterSettings.Simulation.skills) {
+        unit.special = [];
+      }
+      return unit;
+    });
 
 
     if (TYPE === "ALL") {
@@ -165,6 +163,7 @@ export class AppComponent implements AfterViewInit {
     }
     this.menuExpanded = false;
     matches = this.filterMatchesArr(matches);
+    console.log(matches)
     this.matches = matches;
 
     const score = {};

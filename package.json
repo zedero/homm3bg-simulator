@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4300",
-    "build": "ng build",
+    "build": "ng build --output-path docs --base-href /homm3bg-simulator/",
     "buildsub": "ng build --base-href=/homm3bg-simulator/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

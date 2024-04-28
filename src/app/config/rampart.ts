@@ -45,7 +45,7 @@ export const RAMPART: Unit[] = [{
   initiative: 5,
   ranged: false,
   special: [],
-  upgradeFrom: "",
+  upgradeFrom: "DWARVES",
   costs: [4,0],
   faction: "Rampart",
   tier: "Bronze"

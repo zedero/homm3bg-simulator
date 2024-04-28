@@ -2,6 +2,8 @@ import {AfterViewInit, Component} from '@angular/core';
 import {Unit, UNITS} from "./config/data";
 import {SPECIALS} from "./config/specials";
 import {Sort} from '@angular/material/sort';
+import {FormControl} from "@angular/forms";
+import {map, Observable, startWith} from "rxjs";
 
 type UnitState = {
   id: string
@@ -38,6 +40,11 @@ export class AppComponent implements AfterViewInit {
     total: 0
   }
 
+  myControl = new FormControl('');
+  options: string[] = ['One', 'Two', 'Three'];
+  // @ts-ignore
+  filteredOptions: Observable<any[]>;
+
   // @ViewChild(MatSort) sort: MatSort;
 
   public units: Unit[] = UNITS.map((unit) => {
@@ -62,7 +69,8 @@ export class AppComponent implements AfterViewInit {
       Azure: true,
     },
     Simulation: {
-      skills: true
+      skills: true,
+      pack: true
     }
   }
 
@@ -71,9 +79,19 @@ export class AppComponent implements AfterViewInit {
     this.sortedData = this.score.slice();
   }
 
+
   ngAfterViewInit() {
-    // this.score.sort = this.sort;
+    // this.filteredOptions = this.myControl.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value || '')),
+    // );
   }
+
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
+  //
+  //   return this.units.filter(option => option.id.toLowerCase().includes(filterValue));
+  // }
 
   private filterMatchesArr(matches: any[]) {
     return matches.filter((match) => {
@@ -126,6 +144,14 @@ export class AppComponent implements AfterViewInit {
         return false;
       }
       return true;
+    }).filter((match) => {
+      if (
+        match[0].upgradeFrom !== '' && !this.filterSettings.Simulation.pack
+        || match[1].upgradeFrom !== '' && !this.filterSettings.Simulation.pack
+      ) {
+        return false;
+      }
+      return true;
     });
   }
 
@@ -166,7 +192,6 @@ export class AppComponent implements AfterViewInit {
     console.log(matches)
     this.matches = matches;
 
-    const score = {};
     const battleResults = {};
     this.isGenerating = true;
     this.process = 0;
@@ -183,7 +208,6 @@ export class AppComponent implements AfterViewInit {
           setTimeout(() => {
             const winnerData = this.doBattle(match[0], match[1]);
             if (winnerData) {
-              this.addScore(winnerData, score);
               this.addBattleResult(battleResults, winnerData, match[0], match[1])
             } else {
               this.addBattleResult(battleResults, undefined, match[0], match[1])
@@ -210,6 +234,9 @@ export class AppComponent implements AfterViewInit {
   }
 
   private addBattleResult(score: any, winnerData: any, attacker: Unit, defender: Unit) {
+    // if (attacker.id === "HYDRAS_#PACK1" || defender.id === "HYDRAS_#PACK") {
+    //   console.log(winnerData.winner.id, winnerData.percentage + '%', attacker.id, defender.id)
+    // }
     const add = function (score: any, unit: Unit, points: number, combatState: string) {
       if (score[unit.id]) {
         score[unit.id][combatState] += points;
@@ -940,7 +967,7 @@ export class AppComponent implements AfterViewInit {
     return roll();
   }
 
-  private name(id: string) {
+  public name(id: string) {
     return (id.charAt(0) + id.slice(1).toLowerCase()).replace(/_/g, " ")
   }
 

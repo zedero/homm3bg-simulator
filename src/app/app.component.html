@@ -9,6 +9,23 @@
   </div>
 </div>
 
+<!--<form class="example-form">-->
+<!--  <mat-form-field class="example-full-width">-->
+<!--    <mat-label>Number</mat-label>-->
+<!--    <input type="text"-->
+<!--           placeholder="Pick one"-->
+<!--           aria-label="Number"-->
+<!--           matInput-->
+<!--           [formControl]="myControl"-->
+<!--           [matAutocomplete]="auto">-->
+<!--    <mat-autocomplete #auto="matAutocomplete">-->
+<!--      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">-->
+<!--        {{option}}-->
+<!--      </mat-option>-->
+<!--    </mat-autocomplete>-->
+<!--  </mat-form-field>-->
+<!--</form>-->
+
 <mat-expansion-panel [expanded]="menuExpanded" (expandedChange)="menuToggled($event)">
   <mat-expansion-panel-header>
     Menu
@@ -60,12 +77,17 @@
       >Azure</mat-slide-toggle>
   </div>
     <div class="menu filter">
-      <div class="title">Simulate using unit skills</div>
+      <div class="title">Simulate using: </div>
       <mat-slide-toggle
         [id]="'Simulation.skills'"
         [checked]="true"
         (change)="changeFilterSetting($event)"
-      >use skills</mat-slide-toggle>
+      >Unit skills</mat-slide-toggle>
+      <mat-slide-toggle
+        [id]="'Simulation.pack'"
+        [checked]="true"
+        (change)="changeFilterSetting($event)"
+      >Upgraded units</mat-slide-toggle>
     </div>
     <div class="menu filter">
       <div class="title">Simulation iterations per match (lower is faster, higher is more precise)</div>

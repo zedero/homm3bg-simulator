@@ -48,6 +48,27 @@ export class AppComponent implements OnInit {
   // @ts-ignore
   filteredUnitBOptions: Observable<any[]>;
 
+  // -----------------------------------------------------
+
+  factions = [
+    'Castle',
+    'Dungeon',
+    'Necropolis',
+    'Tower',
+    'Rampart',
+    'Fortress',
+    'Inferno',
+    'Neutral',
+  ]
+
+  factionAControl = new FormControl('');
+  // @ts-ignore
+  filteredFactionAOptions: Observable<any[]>;
+
+  factionBControl = new FormControl('');
+  // @ts-ignore
+  filteredFactionBOptions: Observable<any[]>;
+
   // @ViewChild(MatSort) sort: MatSort;
 
   public units: Unit[] = UNITS.map((unit) => {
@@ -93,12 +114,32 @@ export class AppComponent implements OnInit {
       startWith(''),
       map(value => this.unitFilter(value || '')),
     );
+
+    this.filteredFactionAOptions = this.factionAControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.factionFilter(value || '')),
+    );
+
+    this.filteredFactionBOptions = this.factionBControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.factionFilter(value || '')),
+    );
   }
 
   private unitFilter(value: string): Unit[] {
     const filterValue = value.toLowerCase();
     return this.units.filter(option => option.id.toLowerCase().includes(filterValue)).sort((a: Unit,b:Unit) => {
       if (a.id.toLowerCase() < b.id.toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
+  private factionFilter(value: string): String[] {
+    const filterValue = value.toLowerCase();
+    return this.factions.filter(option => option.toLowerCase().includes(filterValue)).sort((a: string,b:string) => {
+      if (a.toLowerCase() < b.toLowerCase()) {
         return -1;
       }
       return 0;
@@ -214,6 +255,14 @@ export class AppComponent implements OnInit {
       }
       matches = [[unitA, unitB],[unitB, unitA]]
       // matches = this.setupTestBattleMatches();
+      this.itterations = 1000;
+    }else if ( TYPE === "factionVfaction") {
+      if (!this.factionAControl.value || !this.factionBControl.value) {
+        return;
+      }
+      matches = this.setupFactionVFactionBattleMatches(units, this.factionAControl.value, this.factionBControl.value)
+
+      this.itterations = 1000;
     }
     this.menuExpanded = false;
     matches = this.filterMatchesArr(matches);
@@ -337,6 +386,8 @@ export class AppComponent implements OnInit {
   analyzeData(data: any) {
     const townPower = new Map();
     const townefficiency = new Map();
+    const townefficiencyFEW = new Map();
+    const townefficiencyPACK = new Map();
     const statScore = new Map();
     const tierResults: any = {
     };
@@ -371,11 +422,23 @@ export class AppComponent implements OnInit {
       } else {
         townPower.set(entry.faction, entry.score)
       }
-
       if (townefficiency.has(entry.faction) && isFinite(entry.resourceEfficiency)) {
         townefficiency.set(entry.faction,  townefficiency.get(entry.faction) + entry.resourceEfficiency)
       } else if(isFinite(entry.resourceEfficiency)) {
-        townefficiency.set(entry.faction, entry.score)
+        townefficiency.set(entry.faction, entry.resourceEfficiency)
+      }
+
+      if (townefficiencyFEW.has(entry.faction) && isFinite(entry.resourceEfficiency) && !entry.name.includes('#')) {
+        townefficiencyFEW.set(entry.faction,  (townefficiencyFEW.get(entry.faction) + entry.resourceEfficiency))
+      } else if(isFinite(entry.resourceEfficiency) && !entry.name.includes('#')) {
+        townefficiencyFEW.set(entry.faction, entry.resourceEfficiency)
+      }
+
+      if (townefficiencyPACK.has(entry.faction) && isFinite(entry.resourceEfficiency) && entry.name.includes('#')) {
+        // console.log(entry.name, entry.resourceEfficiency)
+        townefficiencyPACK.set(entry.faction,  (townefficiencyPACK.get(entry.faction) + entry.resourceEfficiency))
+      } else if(isFinite(entry.resourceEfficiency) && entry.name.includes('#')) {
+        townefficiencyPACK.set(entry.faction, entry.resourceEfficiency)
       }
 
       if (statScore.has(entry.faction)) {
@@ -408,7 +471,9 @@ export class AppComponent implements OnInit {
     })
 
     // console.log('Faction power', townPower)
-    // console.log('Faction efficiency', townefficiency)
+    console.log('Faction efficiency', townefficiency)
+    console.log('Faction efficiency Few', townefficiencyFEW)
+    console.log('Faction efficiency Pack', townefficiencyPACK)
     // console.log('Faction total stats', statScore)
     // console.log('Tier result', tierResults)
     // console.log('Tier result', factionData)
@@ -549,6 +614,22 @@ export class AppComponent implements OnInit {
     units.forEach((unitA: Unit) => {
       units.forEach((unitB: Unit) => {
         if (unitA.id !== unitB.id && unitA.faction !== "Neutral" && unitB.faction !== "Neutral" && unitA.faction !== unitB.faction) {
+          matches.push([unitA, unitB]);
+        }
+      })
+    });
+    return matches;
+  }
+
+  private setupFactionVFactionBattleMatches(units: Unit[], factionA: string, factionB: string) {
+    const matches: any = [];
+    units.forEach((unitA: Unit) => {
+      units.forEach((unitB: Unit) => {
+        if (
+          unitA.faction !== unitB.faction &&
+          (unitA.faction === factionA || unitA.faction === factionB) &&
+          (unitB.faction === factionA || unitB.faction === factionB)
+        ) {
           matches.push([unitA, unitB]);
         }
       })

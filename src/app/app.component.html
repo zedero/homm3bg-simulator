@@ -130,13 +130,13 @@
         <mat-label>Faction A</mat-label>
         <input type="text"
                placeholder="Pick one"
-               aria-label="Unit A"
+               aria-label="Faction A"
                matInput
-               [formControl]="unitAControl"
-               [matAutocomplete]="unitA">
-        <mat-autocomplete #unitA="matAutocomplete">
-          <mat-option *ngFor="let option of filteredUnitAOptions | async" [value]="name(option.id)">
-            {{name(option.id)}}
+               [formControl]="factionAControl"
+               [matAutocomplete]="factionA">
+        <mat-autocomplete #factionA="matAutocomplete">
+          <mat-option *ngFor="let option of filteredFactionAOptions | async" [value]="option">
+            {{option}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field> <span class="vs">vs</span>
@@ -144,17 +144,17 @@
         <mat-label>Faction B</mat-label>
         <input type="text"
                placeholder="Pick one"
-               aria-label="Unit B"
+               aria-label="Faction B"
                matInput
-               [formControl]="unitBControl"
-               [matAutocomplete]="unitB">
-        <mat-autocomplete #unitB="matAutocomplete">
-          <mat-option *ngFor="let option of filteredUnitBOptions | async" [value]="name(option.id)">
-            {{name(option.id)}}
+               [formControl]="factionBControl"
+               [matAutocomplete]="factionB">
+        <mat-autocomplete #factionB="matAutocomplete">
+          <mat-option *ngFor="let option of filteredFactionBOptions | async" [value]="option">
+            {{option}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <button (click)="start('1v1')">Faction vs Faction</button>
+      <button (click)="start('factionVfaction')">Faction vs Faction</button>
     </div>
   </mat-expansion-panel>
 </mat-expansion-panel>

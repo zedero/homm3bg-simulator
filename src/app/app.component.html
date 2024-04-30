@@ -9,23 +9,6 @@
   </div>
 </div>
 
-<!--<form class="example-form">-->
-<!--  <mat-form-field class="example-full-width">-->
-<!--    <mat-label>Number</mat-label>-->
-<!--    <input type="text"-->
-<!--           placeholder="Pick one"-->
-<!--           aria-label="Number"-->
-<!--           matInput-->
-<!--           [formControl]="myControl"-->
-<!--           [matAutocomplete]="auto">-->
-<!--    <mat-autocomplete #auto="matAutocomplete">-->
-<!--      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">-->
-<!--        {{option}}-->
-<!--      </mat-option>-->
-<!--    </mat-autocomplete>-->
-<!--  </mat-form-field>-->
-<!--</form>-->
-
 <mat-expansion-panel [expanded]="menuExpanded" (expandedChange)="menuToggled($event)">
   <mat-expansion-panel-header>
     Menu
@@ -107,6 +90,73 @@
       </mat-card-content>
     </mat-card>
   </div>
+  <mat-expansion-panel >
+    <mat-expansion-panel-header>
+      Special simulations
+    </mat-expansion-panel-header>
+    <div class="conditional_simulations">
+      <mat-form-field class="example-full-width">
+        <mat-label>Unit A</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Unit A"
+               matInput
+               [formControl]="unitAControl"
+               [matAutocomplete]="unitA">
+        <mat-autocomplete #unitA="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitAOptions | async" [value]="name(option.id)">
+            {{name(option.id)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> <span class="vs">vs</span>
+      <mat-form-field class="example-full-width">
+        <mat-label>Unit B</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Unit B"
+               matInput
+               [formControl]="unitBControl"
+               [matAutocomplete]="unitB">
+        <mat-autocomplete #unitB="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitBOptions | async" [value]="name(option.id)">
+            {{name(option.id)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button (click)="start('1v1')">Unit vs Unit</button>
+    </div>
+    <div class="conditional_simulations">
+      <mat-form-field class="example-full-width">
+        <mat-label>Faction A</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Unit A"
+               matInput
+               [formControl]="unitAControl"
+               [matAutocomplete]="unitA">
+        <mat-autocomplete #unitA="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitAOptions | async" [value]="name(option.id)">
+            {{name(option.id)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> <span class="vs">vs</span>
+      <mat-form-field class="example-full-width">
+        <mat-label>Faction B</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Unit B"
+               matInput
+               [formControl]="unitBControl"
+               [matAutocomplete]="unitB">
+        <mat-autocomplete #unitB="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitBOptions | async" [value]="name(option.id)">
+            {{name(option.id)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button (click)="start('1v1')">Faction vs Faction</button>
+    </div>
+  </mat-expansion-panel>
 </mat-expansion-panel>
 
 

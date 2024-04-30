@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {OnInit, Component} from '@angular/core';
 import {Unit, UNITS} from "./config/data";
 import {SPECIALS} from "./config/specials";
 import {Sort} from '@angular/material/sort';
@@ -21,7 +21,7 @@ type CombatState = {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'score','asAttacker','asDefender',  'resourceEfficiency', 'faction', 'tier'];
   public sortedData: any = [];
   public itterations = 100;
@@ -40,10 +40,13 @@ export class AppComponent implements AfterViewInit {
     total: 0
   }
 
-  myControl = new FormControl('');
-  options: string[] = ['One', 'Two', 'Three'];
+  unitAControl = new FormControl('');
   // @ts-ignore
-  filteredOptions: Observable<any[]>;
+  filteredUnitAOptions: Observable<any[]>;
+
+  unitBControl = new FormControl('');
+  // @ts-ignore
+  filteredUnitBOptions: Observable<any[]>;
 
   // @ViewChild(MatSort) sort: MatSort;
 
@@ -75,23 +78,32 @@ export class AppComponent implements AfterViewInit {
   }
 
   constructor() {
-    console.log(this.units)
+    // console.log(this.units)
     this.sortedData = this.score.slice();
   }
 
 
-  ngAfterViewInit() {
-    // this.filteredOptions = this.myControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filter(value || '')),
-    // );
+  ngOnInit() {
+    this.filteredUnitAOptions = this.unitAControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.unitFilter(value || '')),
+    );
+
+    this.filteredUnitBOptions = this.unitBControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.unitFilter(value || '')),
+    );
   }
 
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-  //
-  //   return this.units.filter(option => option.id.toLowerCase().includes(filterValue));
-  // }
+  private unitFilter(value: string): Unit[] {
+    const filterValue = value.toLowerCase();
+    return this.units.filter(option => option.id.toLowerCase().includes(filterValue)).sort((a: Unit,b:Unit) => {
+      if (a.id.toLowerCase() < b.id.toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    });
+  }
 
   private filterMatchesArr(matches: any[]) {
     return matches.filter((match) => {
@@ -161,6 +173,13 @@ export class AppComponent implements AfterViewInit {
     this.filterSettings[setting[0]][setting[1]] = data.checked
   }
 
+  public fromName(name: string | null) {
+    if (name) {
+      return name.toUpperCase().replace(/ /g, "_").replace(/_\*/g, " *");
+    }
+    return null;
+  }
+
   public start(TYPE = "ALL") {
     // test match
     // this.doBattle(this.units[162], this.units[162]);
@@ -168,6 +187,7 @@ export class AppComponent implements AfterViewInit {
     let matches: any;
     this.isOneSided = false;
 
+    // take a copy of the UNITS and if we dont want ot simulate skills remove them all here
     this.units = JSON.parse(JSON.stringify(UNITS));
     const units = this.units.map((unit: any) => {
       if (!this.filterSettings.Simulation.skills) {
@@ -186,6 +206,14 @@ export class AppComponent implements AfterViewInit {
       matches = this.setupPvPBattleMatches(units);
     }else if ( TYPE === "TEST") {
       matches = this.setupTestBattleMatches();
+    }else if ( TYPE === "1v1") {
+      const unitA = this.units.find((unit) => unit.id === this.fromName(this.unitAControl.value));
+      const unitB = this.units.find((unit) => unit.id === this.fromName(this.unitBControl.value));
+      if (!unitA || !unitB) {
+        return;
+      }
+      matches = [[unitA, unitB],[unitB, unitA]]
+      // matches = this.setupTestBattleMatches();
     }
     this.menuExpanded = false;
     matches = this.filterMatchesArr(matches);

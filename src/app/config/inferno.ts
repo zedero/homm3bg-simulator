@@ -58,7 +58,7 @@ export const INFERNO: Unit[] = [{
   ranged: false,
   special: [],
   upgradeFrom: "",
-  costs: [7,0],
+  costs: [4,0],
   faction: "Inferno",
   tier: "Bronze"
 },{

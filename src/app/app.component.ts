@@ -5,6 +5,10 @@ import {Sort} from '@angular/material/sort';
 import {FormControl} from "@angular/forms";
 import {map, Observable, startWith} from "rxjs";
 
+type Match = [Unit, Unit]
+type Matches = Match[]
+
+
 type UnitState = {
   id: string
   paralyzed: boolean;
@@ -26,7 +30,7 @@ export class AppComponent implements OnInit {
   public sortedData: any = [];
   public itterations = 100;
   public score = [];
-  public matches = [];
+  public matches: Matches = [];
   public isOneSided = false;
 
   public factionData = [];
@@ -153,8 +157,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private filterMatchesArr(matches: any[]) {
-    return matches.filter((match) => {
+  private filterMatchesArr(matches: Matches): Matches {
+    return matches.filter((match: Match) => {
       if (
            match[0].tier === 'Bronze' && match[0].faction !== 'Neutral' && !this.filterSettings.Faction.Bronze
         || match[1].tier === 'Bronze' && match[1].faction !== 'Neutral' && !this.filterSettings.Faction.Bronze
@@ -168,7 +172,7 @@ export class AppComponent implements OnInit {
         return false;
       }
       return true;
-    }).filter((match) => {
+    }).filter((match: Match) => {
       if (
         match[0].tier === 'Silver' && match[0].faction !== 'Neutral' && !this.filterSettings.Faction.Silver
         || match[1].tier === 'Silver' && match[1].faction !== 'Neutral' && !this.filterSettings.Faction.Silver
@@ -182,7 +186,7 @@ export class AppComponent implements OnInit {
         return false;
       }
       return true;
-    }).filter((match) => {
+    }).filter((match: Match) => {
       if (
         match[0].tier === 'Gold' && match[0].faction !== 'Neutral' && !this.filterSettings.Faction.Gold
         || match[1].tier === 'Gold' && match[1].faction !== 'Neutral' && !this.filterSettings.Faction.Gold
@@ -196,7 +200,7 @@ export class AppComponent implements OnInit {
         return false;
       }
       return true;
-    }).filter((match) => {
+    }).filter((match: Match) => {
       if (
         match[0].tier === 'Azure' && match[0].faction === 'Neutral' && !this.filterSettings.Neutral.Azure
         || match[1].tier === 'Azure' && match[1].faction === 'Neutral' && !this.filterSettings.Neutral.Azure
@@ -204,7 +208,7 @@ export class AppComponent implements OnInit {
         return false;
       }
       return true;
-    }).filter((match) => {
+    }).filter((match: Match) => {
       if (
         match[0].upgradeFrom !== '' && !this.filterSettings.Simulation.pack
         || match[1].upgradeFrom !== '' && !this.filterSettings.Simulation.pack
@@ -229,15 +233,12 @@ export class AppComponent implements OnInit {
   }
 
   public start(TYPE = "ALL") {
-    // test match
-    // this.doBattle(this.units[162], this.units[162]);
-    // return;
-    let matches: any;
+    let matches: Matches = [];
     this.isOneSided = false;
 
     // take a copy of the UNITS and if we dont want ot simulate skills remove them all here
     this.units = JSON.parse(JSON.stringify(UNITS));
-    const units = this.units.map((unit: any) => {
+    const units: Unit[] = this.units.map((unit: Unit) => {
       if (!this.filterSettings.Simulation.skills) {
         unit.special = [];
       }
@@ -265,7 +266,7 @@ export class AppComponent implements OnInit {
       matches = [[unitA, unitB],[unitB, unitA]]
       // matches = this.setupTestBattleMatches();
       this.itterations = 1000;
-    }else if ( TYPE === "factionVfaction") {
+    } else if ( TYPE === "factionVfaction") {
       if (!this.factionAControl.value || !this.factionBControl.value) {
         return;
       }
@@ -274,8 +275,7 @@ export class AppComponent implements OnInit {
       this.itterations = 1000;
     }
     this.menuExpanded = false;
-    matches = this.filterMatchesArr(matches);
-    console.log(matches)
+    matches = this.filterMatchesArr(matches)
     this.matches = matches;
 
     const battleResults = {};
@@ -289,7 +289,7 @@ export class AppComponent implements OnInit {
 
     setTimeout(() => {
       console.time("Simulation time")
-      let promises = matches.map((match: [Unit, Unit], index: number) => {
+      let promises = matches.map((match: Match, index: number) => {
         return new Promise((resolve) => {
           setTimeout(() => {
             const winnerData = this.doBattle(match[0], match[1]);
@@ -320,10 +320,7 @@ export class AppComponent implements OnInit {
   }
 
   private addBattleResult(score: any, winnerData: any, attacker: Unit, defender: Unit) {
-    // if (attacker.id === "HYDRAS_#PACK1" || defender.id === "HYDRAS_#PACK") {
-    //   console.log(winnerData.winner.id, winnerData.percentage + '%', attacker.id, defender.id)
-    // }
-    const add = function (score: any, unit: Unit, points: number, combatState: string) {
+    const add = function (score: any, unit: Unit, points: number, combatState: string, hasWon: boolean) {
       if (score[unit.id]) {
         score[unit.id][combatState] += points;
         score[unit.id].total += points;
@@ -333,26 +330,30 @@ export class AppComponent implements OnInit {
           defending: 0,
           total: 0,
           count: 0,
+          wins: 0,
         }
         score[unit.id][combatState] += points;
         score[unit.id].total += points;
       }
       score[unit.id].count++;
+      if (hasWon) {
+        score[unit.id].wins++;
+      }
     }
     if (!winnerData) {
-      add(score, attacker, 0,'attacking');
-      add(score, defender, 0,'defending');
+      add(score, attacker, 0,'attacking', false);
+      add(score, defender, 0,'defending', false);
       return
     }
     const winRate = winnerData.percentage;
     if (winnerData.winner.id === attacker.id) {
       // attacker won
-      add(score, attacker, winRate,'attacking');
-      add(score, defender, 100 - winRate,'defending');
+      add(score, attacker, winRate,'attacking', true);
+      add(score, defender, 100 - winRate,'defending', false);
     } else {
       // defender won
-      add(score, attacker, 100 - winRate,'attacking');
-      add(score, defender, winRate,'defending');
+      add(score, attacker, 100 - winRate,'attacking', false);
+      add(score, defender, winRate,'defending', true);
     }
   }
 

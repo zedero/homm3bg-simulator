@@ -84,9 +84,10 @@
     <mat-card>
       <mat-card-header>Simulate: </mat-card-header>
       <mat-card-content>
-        <button (click)="start()">Free for All</button>
-        <button (click)="start('PvN')">Faction vs Neutrals</button>
-        <button (click)="start('PvP')">Faction vs Faction</button>
+        <button (click)="start()" matTooltip="For each unit, fight againt all other units (except themself)">Free for All</button>
+        <button (click)="start('ALL-NF')" matTooltip="For each unit, fight againt all other units from other factions. This best sums up possible unit strength in realistic armies">Factions against for All</button>
+        <button (click)="start('PvN')" matTooltip="Each faction unit fights against each neutral unit">Faction vs Neutrals</button>
+        <button (click)="start('PvP')"  matTooltip="Simulate battles between faction units (except against their own faction)">Faction vs Faction</button>
       </mat-card-content>
     </mat-card>
   </div>
@@ -206,7 +207,8 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </mat-tab>
-  <mat-tab label="Factions"> <table mat-table matSort  [dataSource]="factionDataSorted" class="mat-elevation-z8"  (matSortChange)="sortChangeFaction($event)">
+  <mat-tab label="Factions">
+    <table mat-table matSort  [dataSource]="factionDataSorted" class="mat-elevation-z8"  (matSortChange)="sortChangeFaction($event)">
     <!-- Name Column -->
     <ng-container matColumnDef="faction">
       <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by name"> Faction </th>
@@ -237,6 +239,34 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsFaction"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsFaction;"></tr>
+  </table>
+  </mat-tab>
+  <mat-tab label="Efficiency">
+    <table mat-table matSort  [dataSource]="townDataSorted" class="mat-elevation-z8"  (matSortChange)="sortChangeTown($event)">
+    <!-- Name Column -->
+    <ng-container matColumnDef="faction">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by name"> Faction </th>
+      <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.faction}} </td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="few">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by few" class="row_color__bronze"> Few efficiency </th>
+      <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.few}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pack">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score" class="row_color__silver"> Pack efficiency</th>
+      <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.pack}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency" class="row_color__gold"> Total efficiency</th>
+      <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.total}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsTown"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsTown;"></tr>
   </table>
   </mat-tab>
 </mat-tab-group>

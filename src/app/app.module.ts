@@ -20,33 +20,35 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatCardModule} from "@angular/material/card";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    NgFor,
-    MatInputModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatSortModule,
-    MatButtonToggleModule,
-    MatExpansionModule,
-    MatSlideToggleModule,
-    MatTabsModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatSliderModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        NgFor,
+        MatInputModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        MatCheckboxModule,
+        MatTableModule,
+        MatSortModule,
+        MatButtonToggleModule,
+        MatExpansionModule,
+        MatSlideToggleModule,
+        MatTabsModule,
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatSliderModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        MatTooltipModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

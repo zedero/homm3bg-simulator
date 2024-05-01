@@ -32,6 +32,13 @@ export class AppComponent implements OnInit {
   public factionData = [];
   public factionDataSorted = [];
   public displayedColumnsFaction: string[] = ['faction', 'Bronze', 'Silver', 'Gold', 'Total'];
+
+
+  public townData: any[] = [];
+  public townDataSorted: any[] = [];
+  public displayedColumnsTown = ['faction', 'few', 'pack', 'total'];
+
+
   public menuExpanded = true;
   public isGenerating = false;
   public process = 0;
@@ -240,6 +247,8 @@ export class AppComponent implements OnInit {
 
     if (TYPE === "ALL") {
       matches = this.setupPvAllBattleMatches(units);
+    } else if (TYPE === "ALL-NF") {
+      matches = this.setupPvAllOtherBattleMatches(units);
     } else if ( TYPE === "PvN") {
       matches = this.setupPvNeutralBattleMatches(units);
       // this.isOneSided = true;
@@ -474,6 +483,25 @@ export class AppComponent implements OnInit {
     console.log('Faction efficiency', townefficiency)
     console.log('Faction efficiency Few', townefficiencyFEW)
     console.log('Faction efficiency Pack', townefficiencyPACK)
+
+    this.townData = [];
+    townefficiencyFEW.forEach((data, faction) => {
+      this.townData.push({
+        faction: faction,
+        few: data,
+        pack: townefficiencyPACK.get(faction),
+        total: townefficiency.get(faction)
+      })
+    });
+
+    console.log(this.townDataSorted)
+
+    this.townDataSorted = this.townData.slice();
+    this.sortChangeTown({
+      active: 'total',
+      direction: 'desc'
+    })
+
     // console.log('Faction total stats', statScore)
     // console.log('Tier result', tierResults)
     // console.log('Tier result', factionData)
@@ -548,6 +576,38 @@ export class AppComponent implements OnInit {
     }
   }
 
+  sortChangeTown(sort: Sort) {
+    const data = this.townDataSorted.slice();
+    if (!sort.active || sort.direction === '') {
+      this.townDataSorted = data;
+      return;
+    }
+    // @ts-ignore
+    this.townDataSorted = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'faction':
+          // @ts-ignore
+          return compare(a.faction, b.faction, isAsc);
+        case 'few':
+          // @ts-ignore
+          return compare(a.few, b.few, isAsc);
+        case 'pack':
+          // @ts-ignore
+          return compare(a.pack, b.pack, isAsc);
+        case 'total':
+          // @ts-ignore
+          return compare(a.total, b.total, isAsc);
+        default:
+          return 0;
+      }
+    });
+
+    function compare(a: number | string, b: number | string, isAsc: boolean) {
+      return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+  }
+
   private convertToTableStructure(data: any) {
     const percentage = function (total: number, count: number) {
       return Math.round((total / count) * 100) / 100;
@@ -588,6 +648,17 @@ export class AppComponent implements OnInit {
     units.forEach((unitA: Unit) => {
       units.forEach((unitB: Unit) => {
         if (unitA.id !== unitB.id) { // or unit.id??
+          matches.push([unitA, unitB]);
+        }
+      })
+    });
+    return matches;
+  }
+  private setupPvAllOtherBattleMatches(units: Unit[]) {
+    const matches: any = [];
+    units.forEach((unitA: Unit) => {
+      units.forEach((unitB: Unit) => {
+        if (unitA.id !== unitB.id && (unitA.faction !== unitB.faction || unitB.faction === 'Neutral')) { // or unit.id??
           matches.push([unitA, unitB]);
         }
       })

@@ -21,6 +21,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
         MatAutocompleteModule,
         ReactiveFormsModule,
         MatTooltipModule,
+        MatIconModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

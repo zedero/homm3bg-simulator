@@ -94,6 +94,8 @@
   <mat-expansion-panel >
     <mat-expansion-panel-header>
       Special simulations
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info" [color]="'primary'"
+                matTooltip="Simulations between specific units or factions"></mat-icon>
     </mat-expansion-panel-header>
     <div class="conditional_simulations">
       <mat-form-field class="example-full-width">
@@ -163,6 +165,10 @@
 
 <mat-tab-group>
   <mat-tab label="Units">
+<!--    <ng-template mat-tab-label>-->
+<!--      Units <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info" [color]="'primary'"-->
+<!--                      matTooltip="Simulations between specific units or factions"></mat-icon>-->
+<!--    </ng-template>-->
     <table mat-table matSort  [dataSource]="sortedData" class="mat-elevation-z8" (matSortChange)="sortChangeUnits($event)">
       <!-- Name Column -->
       <ng-container matColumnDef="name">
@@ -171,23 +177,51 @@
       </ng-container>
 
       <ng-container matColumnDef="asAttacker">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score">WR Atc </th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score">WR Atc
+                <mat-icon aria-hidden="false"
+                          fontIcon="info"
+                          [color]="'primary'"
+                          aria-label="Winrate when being the attacking unit (still takes initiative into consideration)"
+                          matTooltip="Winrate when being the attacking unit (still takes initiative into consideration)">
+                </mat-icon>
+        </th>
         <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.asAttacker}}% </td>
       </ng-container>
 
       <ng-container matColumnDef="asDefender">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score">WR Def </th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score">WR Def
+          <mat-icon aria-hidden="false"
+                    fontIcon="info"
+                    [color]="'primary'"
+                    aria-label="Winrate when being the defending unit (still takes initiative into consideration)"
+                    matTooltip="Winrate when being the defending unit (still takes initiative into consideration)">
+          </mat-icon>
+        </th>
         <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.asDefender}}% </td>
       </ng-container>
 
       <ng-container matColumnDef="score">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score"> WR </th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score"> WR
+          <mat-icon aria-hidden="false"
+                    fontIcon="info"
+                    [color]="'primary'"
+                    aria-label="Overall % winrate of all battle itterations in attacking or defending position"
+                    matTooltip="Overall % winrate of all battle itterations in attacking or defending position">
+          </mat-icon>
+        </th>
         <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.score}}% </td>
       </ng-container>
 
       <!-- Weight Column -->
       <ng-container matColumnDef="resourceEfficiency">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency"> Efficiency </th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency"> Efficiency
+          <mat-icon aria-hidden="false"
+                    fontIcon="info"
+                    [color]="'primary'"
+                    aria-label="Units efficiency is calculated by dividing the winrate with the units cost. Valuables in the costs are worth 6 coins each"
+                    matTooltip="Units efficiency is calculated by dividing the winrate with the units cost. Valuables in the costs are worth 6 coins each">
+          </mat-icon>
+        </th>
         <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.resourceEfficiency}} </td>
       </ng-container>
 
@@ -250,18 +284,39 @@
     </ng-container>
     <!-- Name Column -->
     <ng-container matColumnDef="few">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by few" class="row_color__bronze"> Few efficiency </th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by few" class="row_color__bronze"> Few efficiency
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The efficiency of un-upgraded units with all efficiency values combined"
+                  matTooltip="The efficiency of un-upgraded units with all efficiency values combined">
+        </mat-icon>
+      </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.few}} </td>
     </ng-container>
 
     <ng-container matColumnDef="pack">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score" class="row_color__silver"> Pack efficiency</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score" class="row_color__silver"> Pack efficiency
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The efficiency of upgraded units with all efficiency values combined"
+                  matTooltip="The efficiency of upgraded units with all efficiency values combined">
+        </mat-icon>
+      </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.pack}} </td>
     </ng-container>
 
     <!-- Weight Column -->
     <ng-container matColumnDef="total">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency" class="row_color__gold"> Total efficiency</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency" class="row_color__gold"> Total efficiency
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The efficiency of all units combined"
+                  matTooltip="The efficiency of all units combined">
+        </mat-icon>
+      </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.total}} </td>
     </ng-container>
 

@@ -84,7 +84,7 @@
     <mat-card>
       <mat-card-header>Simulate: </mat-card-header>
       <mat-card-content>
-        <button (click)="start()" matTooltip="For each unit, fight againt all other units (except themself)">Free for All</button>
+        <button (click)="start()" matTooltip="For each unit, fight againt all other units (except itself)">Free for All</button>
         <button (click)="start('ALL-NF')" matTooltip="For each unit, fight againt all other units from other factions. This best sums up possible unit strength in realistic army compositions">Factions against for All</button>
         <button (click)="start('PvN')" matTooltip="Each faction unit fights against each neutral unit">Faction vs Neutrals</button>
         <button (click)="start('PvP')"  matTooltip="Simulate battles between faction units (except against their own faction)">Faction vs Faction</button>
@@ -284,37 +284,37 @@
     </ng-container>
     <!-- Name Column -->
     <ng-container matColumnDef="bronze">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by bronze" class="row_color__bronze"> Bronze efficiency
-<!--        <mat-icon aria-hidden="false"-->
-<!--                  fontIcon="info"-->
-<!--                  [color]="'primary'"-->
-<!--                  aria-label="The efficiency of un-upgraded units with all efficiency values combined"-->
-<!--                  matTooltip="The efficiency of un-upgraded units with all efficiency values combined">-->
-<!--        </mat-icon>-->
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by bronze" class="row_color__bronze"> Bronze
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The average efficiency of bronze units. For tower the Gremlins are not counted as their efficiency is Infinite"
+                  matTooltip="The average efficiency of bronze units. For tower the Gremlins are not counted as their efficiency is Infinite">
+        </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.bronze}} </td>
     </ng-container>
 
      <ng-container matColumnDef="silver">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by silver" class="row_color__bronze"> Silver efficiency
-<!--        <mat-icon aria-hidden="false"-->
-<!--                  fontIcon="info"-->
-<!--                  [color]="'primary'"-->
-<!--                  aria-label="The efficiency of un-upgraded units with all efficiency values combined"-->
-<!--                  matTooltip="The efficiency of un-upgraded units with all efficiency values combined">-->
-<!--        </mat-icon>-->
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by silver" class="row_color__bronze"> Silver
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The average efficiency of silver units"
+                  matTooltip="The average efficiency of silver units">
+        </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.silver}} </td>
     </ng-container>
 
      <ng-container matColumnDef="gold">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by gold" class="row_color__bronze"> Gold efficiency
-<!--        <mat-icon aria-hidden="false"-->
-<!--                  fontIcon="info"-->
-<!--                  [color]="'primary'"-->
-<!--                  aria-label="The efficiency of un-upgraded units with all efficiency values combined"-->
-<!--                  matTooltip="The efficiency of un-upgraded units with all efficiency values combined">-->
-<!--        </mat-icon>-->
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by gold" class="row_color__bronze"> Gold
+        <mat-icon aria-hidden="false"
+                  fontIcon="info"
+                  [color]="'primary'"
+                  aria-label="The average efficiency of gold units"
+                  matTooltip="The average efficiency of gold units">
+        </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.gold}} </td>
     </ng-container>
@@ -324,20 +324,20 @@
         <mat-icon aria-hidden="false"
                   fontIcon="info"
                   [color]="'primary'"
-                  aria-label="The efficiency of un-upgraded units with all efficiency values combined"
-                  matTooltip="The efficiency of un-upgraded units with all efficiency values combined">
+                  aria-label="The average efficiency of un-upgraded units with all efficiency values combined"
+                  matTooltip="The average efficiency of un-upgraded units with all efficiency values combined">
         </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.few}} </td>
     </ng-container>
 
     <ng-container matColumnDef="pack">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score" class="row_color__silver"> Pack avg
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by score" class="row_color__silver"> #Pack avg
         <mat-icon aria-hidden="false"
                   fontIcon="info"
                   [color]="'primary'"
-                  aria-label="The efficiency of upgraded units with all efficiency values combined"
-                  matTooltip="The efficiency of upgraded units with all efficiency values combined">
+                  aria-label="The average efficiency of upgraded units with all efficiency values combined"
+                  matTooltip="The average efficiency of upgraded units with all efficiency values combined">
         </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.pack}} </td>
@@ -345,12 +345,12 @@
 
     <!-- Weight Column -->
     <ng-container matColumnDef="total">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency" class="row_color__gold"> Total efficiency
+      <th mat-header-cell mat-sort-header *matHeaderCellDef sortActionDescription="Sort by resourceEfficiency" class="row_color__gold"> Total avg. efficiency
         <mat-icon aria-hidden="false"
                   fontIcon="info"
                   [color]="'primary'"
-                  aria-label="The efficiency of all units combined"
-                  matTooltip="The efficiency of all units combined">
+                  aria-label="The average efficiency of all units combined"
+                  matTooltip="The average efficiency of all units combined">
         </mat-icon>
       </th>
       <td mat-cell *matCellDef="let element" class="{{getRowColor(element.faction)}}"> {{element.total}} </td>

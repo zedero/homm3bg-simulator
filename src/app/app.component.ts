@@ -522,16 +522,19 @@ export class AppComponent implements OnInit {
       return factionUnitCounter
     }
 
-    console.log(factionUnitCount())
+    const notNaNRound = function (value: number) {
+      return isNaN(value) ? '-' : Math.round(value);
+    }
+
     townefficiencyFEW.forEach((data, faction) => {
       const isTower = faction === 'Tower' ? 1 : 0;
       this.townData.push({
         faction: faction,
-        bronze: Math.round(townefficiencyBronze.get(faction) / 6 - isTower),
-        silver: Math.round(townefficiencySilver.get(faction) / 4),
-        gold: Math.round(townefficiencyGold.get(faction) / 4),
-        few: Math.round(data / (factionUnitCount(false) - isTower )),
-        pack: Math.round(townefficiencyPACK.get(faction) / factionUnitCount(false)),
+        bronze: notNaNRound(townefficiencyBronze.get(faction) / 6 - isTower),
+        silver: notNaNRound(townefficiencySilver.get(faction) / 4),
+        gold: notNaNRound(townefficiencyGold.get(faction) / 4),
+        few: notNaNRound(data / (factionUnitCount(false) - isTower )),
+        pack: notNaNRound(townefficiencyPACK.get(faction) / factionUnitCount(false)),
         total: Math.round(townefficiency.get(faction)  / factionUnitCount())
       })
     });
@@ -625,6 +628,15 @@ export class AppComponent implements OnInit {
         case 'faction':
           // @ts-ignore
           return compare(a.faction, b.faction, isAsc);
+        case 'bronze':
+          // @ts-ignore
+          return compare(a.bronze, b.bronze, isAsc);
+        case 'silver':
+          // @ts-ignore
+          return compare(a.silver, b.silver, isAsc);
+        case 'gold':
+          // @ts-ignore
+          return compare(a.gold, b.gold, isAsc);
         case 'few':
           // @ts-ignore
           return compare(a.few, b.few, isAsc);

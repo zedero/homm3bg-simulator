@@ -530,12 +530,12 @@ export class AppComponent implements OnInit {
       const isTower = faction === 'Tower' ? 1 : 0;
       this.townData.push({
         faction: faction,
-        bronze: notNaNRound(townefficiencyBronze.get(faction) / 6 - isTower),
+        bronze: notNaNRound(townefficiencyBronze.get(faction) / (6 - isTower)),
         silver: notNaNRound(townefficiencySilver.get(faction) / 4),
         gold: notNaNRound(townefficiencyGold.get(faction) / 4),
         few: notNaNRound(data / (factionUnitCount(false) - isTower )),
         pack: notNaNRound(townefficiencyPACK.get(faction) / factionUnitCount(false)),
-        total: Math.round(townefficiency.get(faction)  / factionUnitCount())
+        total: Math.round(townefficiency.get(faction)  / (factionUnitCount()- isTower))
       })
     });
 

@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 
   public townData: any[] = [];
   public townDataSorted: any[] = [];
-  public displayedColumnsTown = ['faction', 'few', 'pack', 'total'];
+  public displayedColumnsTown = ['faction','bronze', 'silver', 'gold', 'few', 'pack', 'total'];
 
 
   public menuExpanded = true;
@@ -398,6 +398,9 @@ export class AppComponent implements OnInit {
     const townefficiency = new Map();
     const townefficiencyFEW = new Map();
     const townefficiencyPACK = new Map();
+    const townefficiencyBronze = new Map();
+    const townefficiencySilver = new Map();
+    const townefficiencyGold = new Map();
     const statScore = new Map();
     const tierResults: any = {
     };
@@ -451,6 +454,26 @@ export class AppComponent implements OnInit {
         townefficiencyPACK.set(entry.faction, entry.resourceEfficiency)
       }
 
+      if (townefficiencyBronze.has(entry.faction) && isFinite(entry.resourceEfficiency) && entry.tier === 'Bronze') {
+        townefficiencyBronze.set(entry.faction,  (townefficiencyBronze.get(entry.faction) + entry.resourceEfficiency))
+      } else if(isFinite(entry.resourceEfficiency) && entry.tier === "Bronze") {
+        townefficiencyBronze.set(entry.faction, entry.resourceEfficiency)
+      }
+
+      if (townefficiencySilver.has(entry.faction) && isFinite(entry.resourceEfficiency) && entry.tier === 'Silver') {
+        townefficiencySilver.set(entry.faction,  (townefficiencySilver.get(entry.faction) + entry.resourceEfficiency))
+      } else if(isFinite(entry.resourceEfficiency) && entry.tier === "Silver") {
+        townefficiencySilver.set(entry.faction, entry.resourceEfficiency)
+      }
+
+      if (townefficiencyGold.has(entry.faction) && isFinite(entry.resourceEfficiency) && entry.tier === 'Gold') {
+        townefficiencyGold.set(entry.faction,  (townefficiencyGold.get(entry.faction) + entry.resourceEfficiency))
+      } else if(isFinite(entry.resourceEfficiency) && entry.tier === "Gold") {
+        townefficiencyGold.set(entry.faction, entry.resourceEfficiency)
+      }
+
+
+
       if (statScore.has(entry.faction)) {
         statScore.set(entry.faction,  statScore.get(entry.faction) + entry.statsScore.total)
       } else {
@@ -484,28 +507,40 @@ export class AppComponent implements OnInit {
     console.log('Faction efficiency', townefficiency)
     console.log('Faction efficiency Few', townefficiencyFEW)
     console.log('Faction efficiency Pack', townefficiencyPACK)
+    console.log('Faction efficiency Bronze', townefficiencyBronze)
+    console.log('Faction efficiency Silver', townefficiencySilver)
+    console.log('Faction efficiency Gold', townefficiencyGold)
 
     this.townData = [];
+
+    const factionUnitCount = (total = true) => {
+      let factionUnitCounter = 0;
+      if (this.filterSettings.Faction.Bronze) factionUnitCounter += 3;
+      if (this.filterSettings.Faction.Silver) factionUnitCounter += 2;
+      if (this.filterSettings.Faction.Gold) factionUnitCounter += 2;
+      if (this.filterSettings.Simulation.pack && total) factionUnitCounter *= 2;
+      return factionUnitCounter
+    }
+
+    console.log(factionUnitCount())
     townefficiencyFEW.forEach((data, faction) => {
+      const isTower = faction === 'Tower' ? 1 : 0;
       this.townData.push({
         faction: faction,
-        few: data,
-        pack: townefficiencyPACK.get(faction),
-        total: townefficiency.get(faction)
+        bronze: Math.round(townefficiencyBronze.get(faction) / 6 - isTower),
+        silver: Math.round(townefficiencySilver.get(faction) / 4),
+        gold: Math.round(townefficiencyGold.get(faction) / 4),
+        few: Math.round(data / (factionUnitCount(false) - isTower )),
+        pack: Math.round(townefficiencyPACK.get(faction) / factionUnitCount(false)),
+        total: Math.round(townefficiency.get(faction)  / factionUnitCount())
       })
     });
-
-    console.log(this.townDataSorted)
 
     this.townDataSorted = this.townData.slice();
     this.sortChangeTown({
       active: 'total',
       direction: 'desc'
     })
-
-    // console.log('Faction total stats', statScore)
-    // console.log('Tier result', tierResults)
-    // console.log('Tier result', factionData)
 
   }
 

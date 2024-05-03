@@ -54,3 +54,7 @@ button {
     font-size: $icon-size;
   }
 }
+
+.mat-column-gold, .mat-column-pack {
+  border-right: 1px solid currentColor;
+}

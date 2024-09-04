@@ -1,0 +1,173 @@
+import { Unit } from "./data";
+import { SPECIALS } from "./specials";
+
+
+export const STRONGHOLD: Unit[] = [{
+  id: 'GOBLINS',
+  attack: 1,
+  defence: 0,
+  health: 4,
+  initiative: 6,
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [1,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'GOBLINS_#PACK',
+  attack: 2,
+  defence: 0,
+  health: 4,
+  initiative: 8,
+  ranged: false,
+  special: [],
+  upgradeFrom: "GOBLINS",
+  costs: [2,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'WOLF_RAIDERS',
+  attack: 2,
+  defence: 0,
+  health: 3,
+  initiative: 7,
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [3,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'WOLF_RAIDERS_#PACK',
+  attack: 3,
+  defence: 0,
+  health: 5,
+  initiative: 8,
+  ranged: false,
+  special: [SPECIALS.DOUBLE_ATTACK],
+  upgradeFrom: "WOLF_RAIDERS",
+  costs: [5,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'ORCS',
+  attack: 2,
+  defence: 1,
+  health: 4,
+  initiative: 4,
+  ranged: true,
+  special: [],
+  upgradeFrom: "",
+  costs: [4,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'ORCS_#PACK',
+  attack: 3,
+  defence: 1,
+  health: 5,
+  initiative: 5,
+  ranged: true,
+  special: [],
+  upgradeFrom: "ORCS",
+  costs: [7,0],
+  faction: "Stronghold",
+  tier: "Bronze"
+},{
+  id: 'OGRES',
+  attack: 3,
+  defence: 2,
+  health: 4,
+  initiative: 4,
+  ranged: true,
+  special: [SPECIALS.BLOODLUST_ONE],
+  upgradeFrom: "",
+  costs: [6,0],
+  faction: "Stronghold",
+  tier: "Silver"
+},{
+  id: 'OGRES_#PACK',
+  attack: 3,
+  defence: 1,
+  health: 5,
+  initiative: 5,
+  ranged: true,
+  special: [SPECIALS.BLOODLUST_TWO],
+  upgradeFrom: "OGRES",
+  costs: [8,0],
+  faction: "Stronghold",
+  tier: "Silver"
+},{
+  id: 'THUNDERBIRDS',
+  attack: 4,
+  defence: 1,
+  health: 6,
+  initiative: 9,
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [8,0],
+  faction: "Stronghold",
+  tier: "Silver"
+},{
+  id: 'THUNDERBIRDS_#PACK',
+  attack: 5,
+  defence: 1,
+  health: 6,
+  initiative: 11,
+  ranged: false,
+  special: [SPECIALS.LIGHTNING],
+  upgradeFrom: "THUNDERBIRDS",
+  costs: [14,0],
+  faction: "Stronghold",
+  tier: "Silver"
+},{
+  id: 'CYCLOPS',
+  attack: 4,
+  defence: 1,
+  health: 6,
+  initiative: 6,
+  ranged: true,
+  special: [],
+  upgradeFrom: "",
+  costs: [13,0],
+  faction: "Stronghold",
+  tier: "Gold"
+},{
+  id: 'CYCLOPS_#PACK',
+  attack: 5,
+  defence: 1,
+  health: 7,
+  initiative: 8,
+  ranged: true,
+  special: [],
+  upgradeFrom: "CYCLOPS",
+  costs: [17,1],
+  faction: "Stronghold",
+  tier: "Gold"
+},{
+  id: 'BEHEMOTHS',
+  attack: 7,
+  defence: 2,
+  health: 8,
+  initiative: 6,
+  ranged: false,
+  special: [SPECIALS.DECREASE_DEFENCE],
+  upgradeFrom: "",
+  costs: [19,1],
+  faction: "Stronghold",
+  tier: "Gold"
+},{
+  id: 'BEHEMOTHS_#PACK',
+  attack: 8,
+  defence: 2,
+  health: 10,
+  initiative: 9,
+  ranged: false,
+  special: [SPECIALS.DECREASE_DEFENCE_AND_CORODE],
+  upgradeFrom: "BEHEMOTHS",
+  costs: [29,2],
+  faction: "Stronghold",
+  tier: "Gold"
+}]

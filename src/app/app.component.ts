@@ -14,6 +14,8 @@ type UnitState = {
   paralyzed: boolean;
   poison: number;
   lastThrow: number[];
+  weakness: number;
+  corrosion: number;
 }
 type CombatState = {
   attacker: UnitState;
@@ -785,12 +787,16 @@ export class AppComponent implements OnInit {
           paralyzed: false,
           lastThrow: [],
           poison: 0,
+          weakness: 0,
+          corrosion: 0,
         },
         defender: {
           id: defender.id,
           paralyzed: false,
           lastThrow: [],
           poison: 0,
+          weakness: 0,
+          corrosion: 0,
         }
       }
       const winner = this.startCombat({...attacker}, {...defender}, false, initialState);
@@ -942,7 +948,24 @@ export class AppComponent implements OnInit {
       ) {
         damageModifier = 1;
       }
+      if(this.hasSkill(attacker, SPECIALS.WEAKNESS_ON_ATTACK)) {
+        state.defender.weakness += 1;
+      }
+      if(state.attacker.weakness > 0) {
+        damageModifier--;
+        state.attacker.weakness--;
+      }
+      if(this.hasSkill(attacker, SPECIALS.DECREASE_DEFENCE_AND_CORODE)) {
+        state.defender.corrosion += 1;
+      }
+
       this.doDamage(attacker, defender, isAdjacent, false, state, damageModifier);
+      if (this.hasSkill(attacker, SPECIALS.LIGHTNING) && !this.hasSkill(defender, SPECIALS.IGNORE_DAMAGE_FROM_SPECIALS_AND_MAGIC)) {
+        if (this.roll() === 1) {
+          defender.health -=1;
+        }
+      }
+
       if (this.hasSkill(attacker, SPECIALS.POISON)) {
         state.defender.poison++;
       }
@@ -953,6 +976,11 @@ export class AppComponent implements OnInit {
         if(this.roll() === 0) {
           isAdjacent = false;
         }
+      }
+
+      if (defender.health < 0 && this.hasSkill(defender, SPECIALS.REBIRTH)) {
+        defender.special = [];
+        defender.health = 1;
       }
 
       if (this.isDead(defender)) {
@@ -984,6 +1012,15 @@ export class AppComponent implements OnInit {
           damageModifier = -1;
         }
         this.doDamage(defender, attacker, isAdjacent, true, state, damageModifier);
+        if (attacker.health < 0 && this.hasSkill(attacker, SPECIALS.REBIRTH)) {
+          attacker.special = [];
+          attacker.health = 1;
+        }
+        if (this.hasSkill(defender, SPECIALS.LIGHTNING) && !this.hasSkill(attacker, SPECIALS.IGNORE_DAMAGE_FROM_SPECIALS_AND_MAGIC)) {
+          if (this.roll() === 1) {
+            attacker.health -=1;
+          }
+        }
       }
 
       if (this.isDead(attacker)) {
@@ -994,6 +1031,18 @@ export class AppComponent implements OnInit {
           attacker = this.doDowngrade(attacker, downgrade);
           if (this.isDead(attacker)) {
             return defender;
+          }
+        }
+      }
+
+      if (this.hasSkill(attacker, SPECIALS.DOUBLE_ATTACK)) {
+        this.doDamage(attacker, defender, isAdjacent, false, state, damageModifier);
+        if (this.isDead(defender)) {
+          const downgrade = this.findDowngrade(defender)
+          if (!downgrade) {
+            return attacker;
+          } else {
+            defender = this.doDowngrade(defender, downgrade);
           }
         }
       }
@@ -1046,8 +1095,12 @@ export class AppComponent implements OnInit {
   }
 
   private doDowngrade(upgrade: Unit, downgrade: Unit) {
+    let attackModifier = 0;
+    if(this.hasSkill(downgrade, SPECIALS.REVENGE)) {
+      attackModifier = 2;
+    }
     upgrade.health += downgrade.health; // set new health but adjust for negative damage.
-    upgrade.attack = downgrade.attack;
+    upgrade.attack = downgrade.attack + attackModifier;
     upgrade.defence = downgrade.defence;
     upgrade.initiative = downgrade.initiative;
     upgrade.ranged = downgrade.ranged;
@@ -1152,6 +1205,8 @@ export class AppComponent implements OnInit {
       if (this.hasSkill(source, SPECIALS.IGNORE_DEFENCE)) {
         return 0;
       }
+
+     
       if (this.hasSkill(target, SPECIALS.DEFENCE_ON_ATTACK_ONE) && this.containsRoll(state.attacker.lastThrow, 1)) {
         modifier++;
       }
@@ -1162,10 +1217,41 @@ export class AppComponent implements OnInit {
       if (this.hasSkill(source, SPECIALS.RUST_ATTACK) && this.containsRoll(state.attacker.lastThrow, -1)) {
         modifier -= 2;
       }
+      if (this.hasSkill(source, SPECIALS.DECREASE_DEFENCE)) {
+        if (target.defence > 0) {
+          modifier--;
+        }
+      }
+      if (this.hasSkill(source, SPECIALS.DECREASE_DEFENCE_AND_CORODE)) {
+        if (target.defence > 1) {
+          modifier-=2;
+        } else if (target.defence > 0) {
+          modifier--;
+        }
+      }
+      // generate function that checks the state if the current target is teh attacker or defender
+      if (target.id === state.attacker.id) {
+        if (state.attacker.corrosion > 0) {
+          modifier--;
+          state.attacker.corrosion--;
+        }
+      }
+
+      if (target.id === state.defender.id) {
+        if (state.defender.corrosion > 0) {
+          modifier--;
+          state.defender.corrosion--;
+        }
+      }
+
+      
       return target.defence + modifier <= 0 ? 0 : target.defence + modifier;
     }
 
-    const damage = attack() - targetDefence();
+    let damage = attack() - targetDefence();
+    if (this.hasSkill(target, SPECIALS.LIMIT_DAMAGE_FROM_ATTACK) && damage > 4) {
+      damage = 4;
+    }
     target.health -= damage;
   }
 

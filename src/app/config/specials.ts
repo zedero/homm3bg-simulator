@@ -46,4 +46,14 @@ export enum SPECIALS {
   "CHANCE_MOVE_ENEMY_ON_ATTACK",
   "CHANCE_TO_PARALYZE",
   "CHANCE_TO_POISON",
+  "DOUBLE_ATTACK", 
+  "BLOODLUST_ONE", // TODO Not sure if its even smart to use this on itself (lose a turn of damage)
+  "BLOODLUST_TWO", // TODO Not sure if its even smart to use this on itself (lose a turn of damage)
+  "LIGHTNING",
+  "DECREASE_DEFENCE",
+  "DECREASE_DEFENCE_AND_CORODE",// TODO corode effect if its known what it does
+  "REBIRTH",
+  "WEAKNESS_ON_ATTACK", // TODO What does weakness do??
+  "LIMIT_DAMAGE_FROM_ATTACK",
+  "REVENGE", 
 }

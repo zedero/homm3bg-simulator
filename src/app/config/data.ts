@@ -6,6 +6,9 @@ import {TOWER} from "./tower";
 import {RAMPART} from "./rampart";
 import {FORTRESS} from "./fortress";
 import {INFERNO} from "./inferno";
+import { STRONGHOLD } from "./stronghold";
+import { CONFLUX } from "./conflux";
+import { COVE } from "./cove";
 
 export enum TIER {
   "BRONZE",
@@ -38,5 +41,8 @@ export const UNITS: Unit[] = [
   ...RAMPART,
   ...FORTRESS,
   ...INFERNO,
+  ...STRONGHOLD,
+  ...CONFLUX,
+  ...COVE,
   ...NEUTRAL
 ]

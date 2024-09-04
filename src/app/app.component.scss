@@ -48,6 +48,18 @@ $weight: 500;
     color: teal;
     font-weight: $weight;
   }
+  &__stronghold {
+    color: rgb(192, 165, 142);
+    font-weight: $weight;
+  }
+  &__conflux {
+    color: LightCoral;
+    font-weight: $weight;
+  }
+  &__cove {
+    color: LightSeaGreen;
+    font-weight: $weight;
+  }
   &__inferno {
     color: red;
     font-weight: $weight;

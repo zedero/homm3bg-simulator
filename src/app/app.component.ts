@@ -281,6 +281,7 @@ export class AppComponent implements OnInit {
     this.matches = matches;
 
     const battleResults = {};
+    const resultPerUnit = {};
     this.isGenerating = true;
     this.process = 0;
 
@@ -289,6 +290,8 @@ export class AppComponent implements OnInit {
 
     this.processData.total = matches.length * this.itterations;
 
+//TODO record per unit each simulation result so we can view against who they faired best
+
     setTimeout(() => {
       console.time("Simulation time")
       let promises = matches.map((match: Match, index: number) => {
@@ -296,9 +299,9 @@ export class AppComponent implements OnInit {
           setTimeout(() => {
             const winnerData = this.doBattle(match[0], match[1]);
             if (winnerData) {
-              this.addBattleResult(battleResults, winnerData, match[0], match[1])
+              this.addBattleResult(battleResults, winnerData, match[0], match[1], resultPerUnit)
             } else {
-              this.addBattleResult(battleResults, undefined, match[0], match[1])
+              this.addBattleResult(battleResults, undefined, match[0], match[1], resultPerUnit)
             }
             this.process = Math.round((index / matches.length) * 100);
             this.processData.current = (index  * this.itterations) - Math.floor(Math.random() * this.itterations);
@@ -316,13 +319,14 @@ export class AppComponent implements OnInit {
             console.timeEnd("Simulation time")
             this.isGenerating = false;
             this.showScore(battleResults);
+            console.log(resultPerUnit)
           }, 200)
         })
     }, 500)
   }
 
-  private addBattleResult(score: any, winnerData: any, attacker: Unit, defender: Unit) {
-    const add = function (score: any, unit: Unit, points: number, combatState: string, hasWon: boolean) {
+  private addBattleResult(score: any, winnerData: any, attacker: Unit, defender: Unit, resultPerUnit: any) {
+    const add = function (score: any, unit: Unit, points: number, combatState: string, hasWon: boolean, opponent: Unit) {
       if (score[unit.id]) {
         score[unit.id][combatState] += points;
         score[unit.id].total += points;
@@ -337,25 +341,32 @@ export class AppComponent implements OnInit {
         score[unit.id][combatState] += points;
         score[unit.id].total += points;
       }
+
       score[unit.id].count++;
       if (hasWon) {
         score[unit.id].wins++;
       }
+
+      // -----------------------------
+      if (!resultPerUnit[unit.id]) {
+        resultPerUnit[unit.id] = new Map();
+      }
+        resultPerUnit[unit.id].set(opponent.id, points)
     }
     if (!winnerData) {
-      add(score, attacker, 0,'attacking', false);
-      add(score, defender, 0,'defending', false);
+      add(score, attacker, 0,'attacking', false, defender);
+      add(score, defender, 0,'defending', false, attacker);
       return
     }
     const winRate = winnerData.percentage;
     if (winnerData.winner.id === attacker.id) {
       // attacker won
-      add(score, attacker, winRate,'attacking', true);
-      add(score, defender, 100 - winRate,'defending', false);
+      add(score, attacker, winRate,'attacking', true, defender);
+      add(score, defender, 100 - winRate,'defending', false, attacker);
     } else {
       // defender won
-      add(score, attacker, 100 - winRate,'attacking', false);
-      add(score, defender, winRate,'defending', true);
+      add(score, attacker, 100 - winRate,'attacking', false, defender);
+      add(score, defender, winRate,'defending', true, attacker);
     }
   }
 

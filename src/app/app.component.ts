@@ -247,7 +247,6 @@ export class AppComponent implements OnInit {
       return unit;
     });
 
-
     if (TYPE === "ALL") {
       matches = this.setupPvAllBattleMatches(units);
     } else if (TYPE === "ALL-NF") {
@@ -524,6 +523,22 @@ export class AppComponent implements OnInit {
     console.log('Faction efficiency Silver', townefficiencySilver)
     console.log('Faction efficiency Gold', townefficiencyGold)
 
+    const calculateFactionCost = (faction: string) => {
+        return this.units.filter((entry) => entry.faction === faction).reduce((sum, unit) => {
+          return sum + unit.costs[0] + (unit.costs[1] * 6);
+        }, 0)
+    }
+
+    console.log('Castle', calculateFactionCost('Castle'));
+    console.log('Conflux', calculateFactionCost('Conflux'));
+    console.log('Cove', calculateFactionCost('Cove'));
+    console.log('Dungeon', calculateFactionCost('Dungeon'));
+    console.log('Fortress', calculateFactionCost('Fortress'));
+    console.log('Inferno', calculateFactionCost('Inferno'));
+    console.log('Necropolis', calculateFactionCost('Necropolis'));
+    console.log('Rampart', calculateFactionCost('Rampart'));
+    console.log('Stronghold', calculateFactionCost('Stronghold'));
+    console.log('Tower', calculateFactionCost('Tower'));
     this.townData = [];
 
     const factionUnitCount = (total = true) => {

@@ -1080,6 +1080,9 @@ export class AppComponent implements OnInit {
       if (this.hasSkill(attacker, SPECIALS.CHANCE_TO_PARALYZE) && this.roll() === 0) {
         state.defender.paralyzed = true;
       }
+      if (this.hasSkill(attacker, SPECIALS.HIGH_CHANCE_TO_PARALYZE) && this.roll() !== -1) {
+        state.defender.paralyzed = true;
+      }
       if (this.hasSkill(attacker, SPECIALS.CHANCE_TO_POISON) && this.roll() === 0) {
         state.defender.poison++;
       }

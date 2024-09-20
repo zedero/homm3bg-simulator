@@ -769,6 +769,66 @@ export const NEUTRAL: Unit[] = [{
   costs: [23,0],
   faction: "Neutral",
   tier: "Gold"
+},{
+  id: 'STEEL_GOLEMS *',
+  attack: 3,
+  defence: 2,
+  health: 3,
+  initiative: 5,
+  ranged: false,
+  special: [SPECIALS.SPELL_REDUCTION_TWO], // TODO
+  upgradeFrom: "",
+  costs: [12,0],
+  faction: "Neutral",
+  tier: "Silver"
+},{
+  id: 'FANGARM *',
+  attack: 3,
+  defence: 1,
+  health: 5,
+  initiative: 8,
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [14,0],
+  faction: "Neutral",
+  tier: "Silver"
+},{
+  id: 'LEPRECHAUN *',
+  attack: 2,
+  defence: 0,
+  health: 3,
+  initiative: 5,
+  ranged: false,
+  special: [SPECIALS.LUCK], 
+  upgradeFrom: "",
+  costs: [3,0],
+  faction: "Neutral",
+  tier: "Bronze"
+},{
+  id: 'SATYRS *',
+  attack: 3,
+  defence: 0,
+  health: 5,
+  initiative: 7, 
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [11,0],
+  faction: "Neutral",
+  tier: "Silver"
+},{
+  id: 'AIR_ELEMENTALS *',
+  attack: 2,
+  defence: 0,
+  health: 3,
+  initiative: 7, 
+  ranged: false,
+  special: [],
+  upgradeFrom: "",
+  costs: [7,0],
+  faction: "Neutral",
+  tier: "Bronze"
 }
 // ,{
 //   id: 'TEST *',

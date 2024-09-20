@@ -45,6 +45,7 @@ export enum SPECIALS {
   "BONUS_AGAINST_ARCH_ANGELS",
   "CHANCE_MOVE_ENEMY_ON_ATTACK",
   "CHANCE_TO_PARALYZE",
+  "HIGH_CHANCE_TO_PARALYZE",
   "CHANCE_TO_POISON",
   "DOUBLE_ATTACK", 
   "BLOODLUST_ONE", // TODO Not sure if its even smart to use this on itself (lose a turn of damage)

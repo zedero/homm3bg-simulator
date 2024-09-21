@@ -865,9 +865,10 @@ export class AppComponent implements OnInit {
   private startCombat(attacker: Unit, defender: Unit, isAdjacent:boolean, state: CombatState, combatRound = 0): Unit | null {
     const deathStare = () => {
       if(this.hasSkill(attacker, SPECIALS.DEATH_STARE)) {
-        // if both rolls are -1, set health to 0
-        if ((new Set([this.roll(),this.roll(),-1])).size === 1) {
-          defender.health = 0;
+        const roll1 = this.roll();
+        const roll2 = this.roll();
+        if (roll1 === -1 && roll2 === -1) {
+            defender.health = 0;
         }
       }
     }
